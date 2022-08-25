@@ -17,6 +17,5 @@ Export Weread books to html files
 - Chrome and MS Edge are recommended to run this script
 - Firefox is recommended to print the downloaded HTML to PDF
 - Scraping books with many many pages can crush your browser, cuz I didn't wrote any mechanism of streaming, chunking or garbage collection. Further work can be done to fix this
-- Up to now you can only scrape one book at a time, because I use GM Values to keep and track states. They are browser-scoped and consistent across pages/tabs. Further work can be done to fix this
 
 Enjoy and please don't use this script for pirating books and selling them!
