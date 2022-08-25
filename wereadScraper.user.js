@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Weread Scraper
 // @namespace    https://github.com/Sec-ant/weread-scraper
-// @version      0.1
+// @version      0.2
 // @description  Export Weread books to html file
 // @author       Secant
 // @match        https://weread.qq.com/web/reader/*
@@ -18,7 +18,6 @@
   GM_registerMenuCommand("Start Scraping", startScraping);
   GM_registerMenuCommand("Cancel Scraping", cancelScraping);
   GM_registerMenuCommand("Stop Scraping & Save", stopScrapingAndSave);
-  const scrapeFlag = GM_getValue("scrapeFlag") || false;
 
   // construct html root
   const rootElement = document.createElement("html");
@@ -26,8 +25,11 @@
   const bodyElement = document.createElement("body");
   rootElement.append(styleElement);
   rootElement.append(bodyElement);
+
   // initialize flags
+  const scrapeFlag = GM_getValue("scrapeFlag") || false;
   let contentFound = false;
+
   // define observer handlers
   const contentObserver = new MutationObserver((_, observer) => {
     const content = document.querySelector(".preRenderContainer:not([style])");
@@ -58,6 +60,8 @@
         contentFound = true;
       }
     }
+
+    // turn to next page
     const nextPage = document.querySelector(".readerFooter_button");
     if (contentFound && nextPage) {
       contentFound = false;
@@ -68,18 +72,23 @@
         })
       );
     }
+
+    // complete
     const ending = document.querySelector(".readerFooter_ending");
     if (ending) {
-      stopScrapingAndSave(observer, rootElement);
+      stopScrapingAndSave();
     }
   });
+
+  // start observation
   if (scrapeFlag) {
-    // start observation
     contentObserver.observe(document.documentElement, {
       childList: true,
       subtree: true,
     });
   }
+
+  // menu functions
   function stopScrapingAndSave() {
     GM_setValue("scrapeFlag", false);
     contentObserver.disconnect();
@@ -100,10 +109,12 @@
     bodyElement.innerHTML = "";
     contentFound = false;
   }
+
   function startScraping() {
     GM_setValue("scrapeFlag", true);
     window.location.reload();
   }
+
   function cancelScraping() {
     GM_setValue("scrapeFlag", false);
     window.location.reload();
