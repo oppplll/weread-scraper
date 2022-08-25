@@ -1,14 +1,12 @@
 // ==UserScript==
 // @name         Weread Scraper
 // @namespace    https://github.com/Sec-ant/weread-scraper
-// @version      0.2
+// @version      0.3
 // @description  Export Weread books to html file
 // @author       Secant
 // @match        https://weread.qq.com/web/reader/*
 // @icon         https://weread.qq.com/favicon.ico
 // @grant        GM_registerMenuCommand
-// @grant        GM_setValue
-// @grant        GM_getValue
 // @run-at       document-start
 // ==/UserScript==
 
@@ -27,7 +25,9 @@
   rootElement.append(bodyElement);
 
   // initialize flags
-  const scrapeFlag = GM_getValue("scrapeFlag") || false;
+  const scrapeFlag = JSON.parse(
+    sessionStorage.getItem("scrapeFlag") || "false"
+  );
   let contentFound = false;
 
   // define observer handlers
@@ -90,7 +90,7 @@
 
   // menu functions
   function stopScrapingAndSave() {
-    GM_setValue("scrapeFlag", false);
+    sessionStorage.setItem("scrapeFlag", "false");
     contentObserver.disconnect();
     const docBlob = new Blob([rootElement.outerHTML], {
       type: "text/html;charset=utf-8;",
@@ -111,12 +111,12 @@
   }
 
   function startScraping() {
-    GM_setValue("scrapeFlag", true);
+    sessionStorage.setItem("scrapeFlag", "true");
     window.location.reload();
   }
 
   function cancelScraping() {
-    GM_setValue("scrapeFlag", false);
+    sessionStorage.setItem("scrapeFlag", "false");
     window.location.reload();
   }
 })();
