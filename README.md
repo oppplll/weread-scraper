@@ -1,6 +1,8 @@
 # weread-scraper
 Export Weread books to html files
 
+<img src="https://user-images.githubusercontent.com/10386119/186714588-97e1b755-ce62-4f89-a64d-268824f39e9e.png" width=480/>
+
 ## Steps
 
 - Add [this userscript](https://greasyfork.org/zh-CN/scripts/450169-weread-scraper) in [Tampermonkey](https://www.tampermonkey.net/)
