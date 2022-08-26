@@ -18,6 +18,7 @@ Export Weread books to html files
 
 - Chrome and MS Edge are recommended to run this script
 - Firefox is recommended to print the downloaded HTML to PDF
+- Many of the books use these fonts, install them to have a better reading experience: [汉仪旗黑 50S](https://www.hanyi.com.cn/productdetail?id=831), [汉仪旗黑 65S](https://www.hanyi.com.cn/productdetail.php?id=834) and [汉仪楷体S](https://www.hanyi.com.cn/productdetail.php?id=814). There might be more fonts  but I didn't check them all. If you know, feel free to create issues
 - Scraping books with many many pages can crush your browser, cuz I didn't use any mechanism of streaming, chunking or garbage collection. Further work can be done to fix this
 
 Enjoy and please don't use this script for pirating books and selling them!
