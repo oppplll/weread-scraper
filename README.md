@@ -7,7 +7,7 @@ Export Weread books to html files
 
 ## Steps
 
-- Add this userscript in [Tampermonkey](https://www.tampermonkey.net/)
+- Add [this userscript](https://github.com/Sec-ant/weread-scraper/raw/with-click-interval/wereadScraper.user.js) in [Tampermonkey](https://www.tampermonkey.net/)
 - Select the book you want to save in Weread, e.g. https://weread.qq.com/web/bookDetail/f6432a905b73c0f64797a8d
 - Browse the first page of this book or any other page where you want to start to save, e.g. https://weread.qq.com/web/reader/f6432a905b73c0f64797a8dkc81322c012c81e728d9d180
 - Left click Tampermonkey icon and then click the "Start Scraping" button in the popped up menu
