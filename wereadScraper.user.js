@@ -1,12 +1,14 @@
 // ==UserScript==
 // @name         Weread Scraper
 // @namespace    https://github.com/Sec-ant/weread-scraper
-// @version      0.3
+// @version      0.3.1
 // @description  Export Weread books to html file
 // @author       Secant
 // @match        https://weread.qq.com/web/reader/*
 // @icon         https://weread.qq.com/favicon.ico
 // @grant        GM_registerMenuCommand
+// @grant        GM_setValue
+// @grant        GM_getValue
 // @run-at       document-start
 // ==/UserScript==
 
@@ -16,6 +18,7 @@
   GM_registerMenuCommand("Start Scraping", startScraping);
   GM_registerMenuCommand("Cancel Scraping", cancelScraping);
   GM_registerMenuCommand("Stop Scraping & Save", stopScrapingAndSave);
+  GM_registerMenuCommand("Set Click Interval", setClickInterval);
 
   // construct html root
   const rootElement = document.createElement("html");
@@ -29,6 +32,8 @@
     sessionStorage.getItem("scrapeFlag") || "false"
   );
   let contentFound = false;
+  let timeoutIsSet = false;
+  let timeoutId;
 
   // define observer handlers
   const contentObserver = new MutationObserver((_, observer) => {
@@ -63,14 +68,19 @@
 
     // turn to next page
     const nextPage = document.querySelector(".readerFooter_button");
-    if (contentFound && nextPage) {
+    if (contentFound && nextPage && !timeoutIsSet) {
       contentFound = false;
-      nextPage.dispatchEvent(
-        new MouseEvent("click", {
-          clientX: 1,
-          clientY: 1,
-        })
-      );
+      timeoutId = setTimeout(() => {
+        const nextPage = document.querySelector(".readerFooter_button");
+        nextPage.dispatchEvent(
+          new MouseEvent("click", {
+            clientX: 1,
+            clientY: 1,
+          })
+        );
+        timeoutIsSet = false;
+      }, getClickInterval());
+      timeoutIsSet = true;
     }
 
     // complete
@@ -86,6 +96,11 @@
       childList: true,
       subtree: true,
     });
+  }
+
+  // get click interval helper function
+  function getClickInterval() {
+    return GM_getValue("clickInterval", 0);
   }
 
   // menu functions
@@ -108,6 +123,8 @@
     styleElement.innerHTML = "";
     bodyElement.innerHTML = "";
     contentFound = false;
+    timeoutIsSet = false;
+    clearTimeout(timeoutId);
   }
 
   function startScraping() {
@@ -118,5 +135,21 @@
   function cancelScraping() {
     sessionStorage.setItem("scrapeFlag", "false");
     window.location.reload();
+  }
+
+  function setClickInterval() {
+    const prevClickInterval = getClickInterval();
+    let newClickInterval;
+    try {
+      newClickInterval = parseFloat(
+        window.prompt("Click interval (ms):", prevClickInterval)
+      );
+      if (!Number.isFinite(newClickInterval) || newClickInterval < 0) {
+        throw undefined;
+      }
+    } catch (e) {
+      newClickInterval = prevClickInterval;
+    }
+    GM_setValue("clickInterval", newClickInterval);
   }
 })();
