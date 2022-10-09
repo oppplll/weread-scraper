@@ -1,4 +1,4 @@
-**This branch (with next-page-click interval support) currently only works in Firefox and won't work in Chrome or MS Edge**
+**This branch (with next-page-click interval support) currently only works in Firefox and won't work in Chrome or MS Edge, see https://github.com/Sec-ant/weread-scraper/issues/1 for more details**
 
 # weread-scraper
 Export Weread books to html files
