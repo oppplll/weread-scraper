@@ -12,6 +12,7 @@ Export Weread books to html files
 - Wait for scraping to complete and an HTML file will be automatically generated and downloaded
 - You can cancel an ongoing scraping process by clicking "Cancel Scraping"
 - You can stop an ongoing scraping process and save the available scraped contents by clicking "Stop Scraping & Save"
+- You can set a next-page-click interval by clicking "Set Click Interval" and input the desired value (in milliseconds) 
 - That's it!
 
 ## Notes
