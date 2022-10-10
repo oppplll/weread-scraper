@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Weread Scraper
 // @namespace    https://github.com/Sec-ant/weread-scraper
-// @version      0.3.1
+// @version      0.4
 // @description  Export Weread books to html file
 // @author       Secant
 // @match        https://weread.qq.com/web/reader/*
@@ -33,10 +33,10 @@
   );
   let contentFound = false;
   let timeoutIsSet = false;
-  let timeoutId;
+  let abortTimeout = false;
 
   // define observer handlers
-  const contentObserver = new MutationObserver((_, observer) => {
+  const contentObserver = new MutationObserver(async (_, observer) => {
     const content = document.querySelector(".preRenderContainer:not([style])");
     if (!contentFound && content) {
       // define styles
@@ -70,17 +70,24 @@
     const nextPage = document.querySelector(".readerFooter_button");
     if (contentFound && nextPage && !timeoutIsSet) {
       contentFound = false;
-      timeoutId = setTimeout(() => {
-        const nextPage = document.querySelector(".readerFooter_button");
+      timeoutIsSet = true;
+      // sleep for {click interval} ms
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, getClickInterval());
+      });
+      timeoutIsSet = false;
+      if (abortTimeout) {
+        abortTimeout = false;
+      } else {
         nextPage.dispatchEvent(
           new MouseEvent("click", {
             clientX: 1,
             clientY: 1,
           })
         );
-        timeoutIsSet = false;
-      }, getClickInterval());
-      timeoutIsSet = true;
+      }
     }
 
     // complete
@@ -124,7 +131,7 @@
     bodyElement.innerHTML = "";
     contentFound = false;
     timeoutIsSet = false;
-    clearTimeout(timeoutId);
+    abortTimeout = true;
   }
 
   function startScraping() {
